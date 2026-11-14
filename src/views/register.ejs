@@ -1,0 +1,27 @@
+<%- include('partials/head', { title: 'Student sign-up', bare: true }) %>
+<div class="auth">
+  <aside class="auth-aside">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">&#10003;</span>Attendance</div>
+    <h1>See your attendance, course by course.</h1>
+    <p>Create a student account with your matric number to check how you are doing in every course you take.</p>
+    <div class="legend" aria-hidden="true"><span>Present</span><span>Late</span><span>Absent</span></div>
+  </aside>
+  <div class="auth-main"><div class="auth-card card card-pad">
+    <div class="seg-tabs"><a href="/login">Sign in</a><a href="/register" aria-current="page">Student sign-up</a></div>
+    <%- include('partials/flash') %>
+    <% if (error) { %><p class="form-error" role="alert"><%= error %></p><% } %>
+    <form method="post" action="/register" novalidate>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <%- include('partials/field', { name: 'name', label: 'Full name', value: values.name, required: true, autocomplete: 'name', autofocus: true }) %>
+      <%- include('partials/field', { name: 'email', label: 'Email', type: 'email', value: values.email, required: true, autocomplete: 'email' }) %>
+      <%- include('partials/field', { name: 'password', label: 'Password', type: 'password', value: '', required: true, autocomplete: 'new-password', hint: 'At least 8 characters.' }) %>
+      <%- include('partials/field', { name: 'matricNo', label: 'Matric number', value: values.matricNo, required: true }) %>
+      <div class="grid-2">
+        <%- include('partials/field', { name: 'department', label: 'Department', value: values.department }) %>
+        <%- include('partials/field', { name: 'level', label: 'Level', value: values.level, placeholder: '300' }) %>
+      </div>
+      <button class="btn btn-primary btn-block" type="submit">Create account</button>
+    </form>
+  </div></div>
+</div>
+<%- include('partials/foot') %>

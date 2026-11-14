@@ -1,0 +1,28 @@
+<%- include('partials/head', { title: 'My attendance' }) %>
+<% if (!student) { %>
+<div class="page-head"><h1>My attendance</h1></div>
+<div class="card empty"><h3>Your account is not linked to a student record</h3><p>Ask an administrator to link your matric number to this login.</p></div>
+<% } else { %>
+<div class="page-head"><div><h1>My attendance</h1>
+  <p class="muted"><%= data.student.fullName %> &middot; <%= data.student.matricNo %><% if (data.student.department) { %> &middot; <%= data.student.department %><% } %></p></div></div>
+<% if (data.courses.length) { %>
+<div class="course-cards">
+  <% data.courses.forEach(function (c) { %>
+  <article class="card course-card">
+    <div><h2 class="h3"><%= c.code %></h2><p class="muted"><%= c.title %></p></div>
+    <div class="big<%= c.belowThreshold ? ' low' : '' %>"><%- c.rate === null ? '&mdash;' : c.rate + '%' %></div>
+    <% if (c.rate === null) { %><p class="muted">No sessions held yet.</p>
+    <% } else { %><div class="rate"><div class="meter<%= c.belowThreshold ? ' low' : '' %>" role="img" aria-label="<%= c.rate %>% attendance"><span style="width:<%= Math.min(c.rate, 100) %>%"></span></div><b><%= c.rate %>%</b></div><% } %>
+    <div class="counts"><span class="badge badge-present"><%= c.present %> present</span><span class="badge badge-late"><%= c.late %> late</span><span class="badge badge-absent"><%= c.absent %> absent</span><span class="badge"><%= c.sessions %> sessions</span></div>
+    <% if (c.belowThreshold) { %><p class="warn">Below the <%= data.threshold %>% attendance requirement.</p><% } %>
+    <% if (c.records.length) { %>
+    <details><summary>Daily record</summary>
+      <ul class="records"><% c.records.forEach(function (r) { %><li><span><%= r.date %></span><span class="badge badge-<%= r.status %>"><%= STATUS[r.status] %></span></li><% }); %></ul>
+    </details>
+    <% } %>
+  </article>
+  <% }); %>
+</div>
+<% } else { %><div class="card empty"><h3>Not enrolled in any course yet</h3><p>Your lecturer or an administrator will enrol you.</p></div><% } %>
+<% } %>
+<%- include('partials/foot') %>

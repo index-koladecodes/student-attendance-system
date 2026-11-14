@@ -1,0 +1,25 @@
+<%- include('../partials/head', { title: 'Courses' }) %>
+<div class="page-head">
+  <div><h1>Courses</h1><p class="muted"><%= user.role === 'admin' ? 'All courses in the system' : 'The courses you teach' %></p></div>
+  <% if (user.role === 'admin') { %><div class="actions"><a class="btn btn-primary" href="/courses/new">New course</a></div><% } %>
+</div>
+<% if (courses.length) { %>
+<div class="card table-wrap"><table>
+  <caption class="sr-only">Courses</caption>
+  <thead><tr><th>Code</th><th>Title</th><th>Lecturer</th><th class="num">Students</th><th class="num">Sessions</th><% if (user.role === 'admin') { %><th><span class="sr-only">Actions</span></th><% } %></tr></thead>
+  <tbody>
+  <% courses.forEach(function (c) { %>
+    <tr>
+      <td class="code"><a class="row-link" href="/courses/<%= c.id %>/register"><%= c.code %></a></td>
+      <td><%= c.title %></td>
+      <td><% if (c.lecturerName) { %><%= c.lecturerName %><% } else { %><span class="muted">Unassigned</span><% } %></td>
+      <td class="num"><%= c.enrolledCount %></td><td class="num"><%= c.sessions %></td>
+      <% if (user.role === 'admin') { %><td><div class="cell-actions"><a class="btn btn-small" href="/courses/<%= c.id %>/edit">Edit</a><a class="btn btn-small btn-danger" href="/courses/<%= c.id %>/delete">Delete</a></div></td><% } %>
+    </tr>
+  <% }); %>
+  </tbody>
+</table></div>
+<% } else { %>
+<div class="card empty"><h3><%= user.role === 'admin' ? 'No courses yet' : 'No courses assigned' %></h3><p><%= user.role === 'admin' ? 'Create the first course to get started.' : 'An administrator will assign courses to you.' %></p></div>
+<% } %>
+<%- include('../partials/foot') %>

@@ -1,0 +1,10 @@
+<p class="crumb"><a href="/courses">Courses</a> / <%= course.code %></p>
+<div class="page-head">
+  <div><h1><%= course.code %> &mdash; <%= course.title %></h1><p class="muted">Lecturer: <%= course.lecturerName || 'unassigned' %></p></div>
+  <% if (user.role === 'admin') { %><div class="actions"><a class="btn btn-small" href="/courses/<%= course.id %>/edit">Edit course</a></div><% } %>
+</div>
+<nav class="tabs" aria-label="Course sections">
+  <% [['register', 'Mark attendance'], ['students', 'Students'], ['report', 'Report']].forEach(function (t) { %>
+    <a href="/courses/<%= course.id %>/<%= t[0] %>"<%- tab === t[0] ? ' aria-current="page"' : '' %>><%= t[1] %></a>
+  <% }); %>
+</nav>

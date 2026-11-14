@@ -1,0 +1,23 @@
+<% const f = values || (course ? { code: course.code, title: course.title, lecturerId: course.lecturerId || '' } : {}); %>
+<%- include('../partials/head', { title: course ? 'Edit course' : 'New course' }) %>
+<p class="crumb"><a href="/courses">Courses</a> / <%= course ? 'Edit ' + course.code : 'New course' %></p>
+<div class="page-head"><h1><%= course ? 'Edit ' + course.code : 'New course' %></h1></div>
+<div class="card card-pad narrow">
+  <% if (error) { %><p class="form-error" role="alert"><%= error %></p><% } %>
+  <form method="post" action="<%= course ? '/courses/' + course.id + '/edit' : '/courses' %>" novalidate>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <%- include('../partials/field', { name: 'code', label: 'Course code', value: f.code, required: true, placeholder: 'CSC 301', autofocus: true }) %>
+    <%- include('../partials/field', { name: 'title', label: 'Course title', value: f.title, required: true }) %>
+    <div class="field">
+      <label for="f-lecturerId">Lecturer <span class="muted">(optional)</span></label>
+      <select id="f-lecturerId" name="lecturerId">
+        <option value="">Unassigned</option>
+        <% lecturers.forEach(function (l) { %><option value="<%= l.id %>"<%- String(f.lecturerId || '') === l.id ? ' selected' : '' %>><%= l.name %></option><% }); %>
+      </select>
+    </div>
+    <div class="form-actions"><a class="btn" href="/courses">Cancel</a>
+      <% if (course) { %><a class="btn btn-danger" href="/courses/<%= course.id %>/delete">Delete</a><% } %>
+      <button class="btn btn-primary" type="submit"><%= course ? 'Save changes' : 'Create course' %></button></div>
+  </form>
+</div>
+<%- include('../partials/foot') %>

@@ -1,0 +1,17 @@
+<%- include('../partials/head', { title: 'Accounts' }) %>
+<div class="page-head">
+  <div><h1>Accounts</h1><p class="muted">Create lecturer and administrator logins</p></div>
+  <div class="actions"><a class="btn btn-primary" href="/accounts/new">New account</a></div>
+</div>
+<div class="card table-wrap"><table>
+  <caption class="sr-only">Accounts</caption>
+  <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Created</th><th><span class="sr-only">Actions</span></th></tr></thead>
+  <tbody>
+  <% accounts.forEach(function (a) { const d = new Date(a.createdAt); %>
+    <tr><td><%= a.name %></td><td><%= a.email %></td><td><span class="badge"><%= ROLE[a.role] %></span></td>
+      <td><%= String(d.getDate()).padStart(2, '0') %>-<%= String(d.getMonth() + 1).padStart(2, '0') %>-<%= d.getFullYear() %></td>
+      <td><div class="cell-actions"><% if (a.id === user.id) { %><span class="muted">You</span><% } else { %><a class="btn btn-small btn-danger" href="/accounts/<%= a.id %>/delete">Delete</a><% } %></div></td></tr>
+  <% }); %>
+  </tbody>
+</table></div>
+<%- include('../partials/foot') %>

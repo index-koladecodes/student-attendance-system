@@ -1,0 +1,10 @@
+<%- include('partials/head', { title: 'Please confirm' }) %>
+<div class="card card-pad narrow centered">
+  <h1><%= heading %></h1>
+  <p class="spaced"><%= message %></p>
+  <form method="post" action="<%= action %>">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="form-actions"><a class="btn" href="<%= cancelUrl %>">Cancel</a><button class="btn btn-danger-solid" type="submit"><%= confirmLabel %></button></div>
+  </form>
+</div>
+<%- include('partials/foot') %>

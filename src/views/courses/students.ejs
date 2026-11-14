@@ -1,0 +1,28 @@
+<%- include('../partials/head', { title: course.code + ' students' }) %>
+<%- include('../partials/course-head') %>
+<div class="card card-pad spaced-after">
+  <form class="toolbar flush" method="post" action="/courses/<%= course.id %>/students">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <label class="sr-only" for="enroll-student">Student to enrol</label>
+    <select id="enroll-student" name="studentId" class="select-wide"<%- candidates.length ? '' : ' disabled' %>>
+      <% if (candidates.length) { %><% candidates.forEach(function (s) { %><option value="<%= s.id %>"><%= s.matricNo %> &mdash; <%= s.fullName %></option><% }); %>
+      <% } else { %><option>Everyone is already enrolled</option><% } %>
+    </select>
+    <button class="btn btn-primary" type="submit"<%- candidates.length ? '' : ' disabled' %>>Enrol student</button>
+  </form>
+</div>
+<% if (enrolled.length) { %>
+<div class="card table-wrap"><table>
+  <caption class="sr-only">Enrolled students</caption>
+  <thead><tr><th>Matric no.</th><th>Name</th><th>Department</th><th>Level</th><th><span class="sr-only">Actions</span></th></tr></thead>
+  <tbody>
+  <% enrolled.forEach(function (s) { %>
+    <tr><td class="code"><%= s.matricNo %></td><td><%= s.fullName %></td><td><%= s.department || '' %></td><td><%= s.level || '' %></td>
+      <td><div class="cell-actions"><form method="post" action="/courses/<%= course.id %>/students/<%= s.id %>/remove"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn btn-small btn-danger" type="submit" aria-label="Remove <%= s.fullName %> from <%= course.code %>">Remove</button></form></div></td></tr>
+  <% }); %>
+  </tbody>
+</table></div>
+<% } else { %>
+<div class="card empty"><h3>No students enrolled yet</h3><p>Choose a student above to enrol them in this course.</p></div>
+<% } %>
+<%- include('../partials/foot') %>

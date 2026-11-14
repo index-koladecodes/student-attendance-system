@@ -1,0 +1,27 @@
+<%- include('../partials/head', { title: 'Students' }) %>
+<div class="page-head">
+  <div><h1>Students</h1><p class="muted"><%= user.role === 'admin' ? 'Manage student records' : 'Look up students' %></p></div>
+  <% if (user.role === 'admin') { %><div class="actions"><a class="btn btn-primary" href="/students/new">Add student</a></div><% } %>
+</div>
+<form class="toolbar" method="get" action="/students" role="search">
+  <label class="sr-only" for="student-search">Search students</label>
+  <input id="student-search" name="q" type="search" placeholder="Search by name or matric number" value="<%= q %>">
+  <button class="btn" type="submit">Search</button>
+  <% if (q) { %><a class="btn btn-link-plain" href="/students">Clear</a><% } %>
+</form>
+<% if (students.length) { %>
+<div class="card table-wrap"><table>
+  <caption class="sr-only">Students</caption>
+  <thead><tr><th>Matric no.</th><th>Name</th><th>Department</th><th>Level</th><th>Login</th><% if (user.role === 'admin') { %><th><span class="sr-only">Actions</span></th><% } %></tr></thead>
+  <tbody>
+  <% students.forEach(function (s) { %>
+    <tr><td class="code"><%= s.matricNo %></td><td><%= s.fullName %></td><td><%= s.department || '' %></td><td><%= s.level || '' %></td>
+      <td><% if (s.accountEmail) { %><%= s.accountEmail %><% } else { %><span class="muted">No login</span><% } %></td>
+      <% if (user.role === 'admin') { %><td><div class="cell-actions"><a class="btn btn-small" href="/students/<%= s.id %>/edit">Edit</a><a class="btn btn-small btn-danger" href="/students/<%= s.id %>/delete">Delete</a></div></td><% } %></tr>
+  <% }); %>
+  </tbody>
+</table></div>
+<% } else { %>
+<div class="card empty"><h3><%= q ? 'No matches' : 'No students yet' %></h3><p><%= q ? 'Try a different name or matric number.' : 'Add the first student record.' %></p></div>
+<% } %>
+<%- include('../partials/foot') %>

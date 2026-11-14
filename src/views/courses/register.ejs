@@ -1,0 +1,57 @@
+<%- include('../partials/head', { title: course.code + ' attendance' }) %>
+<%- include('../partials/course-head') %>
+<div class="card">
+  <div class="reg-controls">
+    <div class="date-box">
+      <a class="btn btn-small" href="/courses/<%= course.id %>/register?date=<%= prevDate %>" aria-label="Previous day (<%= prevDate %>)">&lsaquo;</a>
+      <form class="date-form" method="get" action="/courses/<%= course.id %>/register">
+        <div class="field"><label for="reg-date">Date (DD-MM-YYYY)</label>
+          <input id="reg-date" name="date" type="text" inputmode="numeric" maxlength="10" value="<%= register.date %>" pattern="\d{2}-\d{2}-\d{4}" placeholder="DD-MM-YYYY" autocomplete="off"></div>
+        <button class="btn btn-small" type="submit">Go</button>
+      </form>
+      <% if (isToday) { %><span class="btn btn-small is-disabled" aria-disabled="true">&rsaquo;</span><% } else { %>
+        <a class="btn btn-small" href="/courses/<%= course.id %>/register?date=<%= nextDate %>" aria-label="Next day (<%= nextDate %>)">&rsaquo;</a>
+        <a class="btn btn-small" href="/courses/<%= course.id %>/register">Today</a><% } %>
+      <span class="date-day"><%= weekday %></span>
+    </div>
+    <div class="tally" aria-label="Saved attendance for this date">
+      <span class="badge badge-present"><%= tally.present %> present</span><span class="badge badge-late"><%= tally.late %> late</span><span class="badge badge-absent"><%= tally.absent %> absent</span><span class="badge"><%= tally.none %> not marked</span>
+    </div>
+  </div>
+  <% if (register.marked) { %><div class="banner">This register was already saved. Changes you save will correct it.</div>
+  <% } else { %><div class="banner banner-info">Not marked yet for this date.</div><% } %>
+
+  <% if (register.records.length) { %>
+  <form method="post" action="/courses/<%= course.id %>/register">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <input type="hidden" name="date" value="<%= register.date %>">
+    <% register.records.forEach(function (r) { %>
+    <div class="reg-row">
+      <span class="code"><%= r.matricNo %></span><span class="who-name"><%= r.fullName %></span>
+      <div class="seg" role="radiogroup" aria-label="Attendance for <%= r.fullName %>">
+        <% ['present', 'late', 'absent'].forEach(function (s) { %>
+        <input type="radio" id="st-<%= r.studentId %>-<%= s %>" name="status_<%= r.studentId %>" value="<%= s %>"<%- r.status === s ? ' checked' : '' %>><label for="st-<%= r.studentId %>-<%= s %>"><%= STATUS[s] %></label>
+        <% }); %>
+      </div>
+    </div>
+    <% }); %>
+    <div class="reg-foot">
+      <span class="grow muted">Students you leave unmarked are not changed.</span>
+      <button class="btn btn-primary" type="submit" name="intent" value="save"><%= register.marked ? 'Update register' : 'Save register' %></button>
+      <button class="btn" type="submit" name="intent" value="fill">Save and mark everyone else present</button>
+    </div>
+  </form>
+  <% } else { %>
+  <div class="empty"><h3>No students enrolled</h3><p>Add students on the <a href="/courses/<%= course.id %>/students">Students tab</a> first.</p></div>
+  <% } %>
+</div>
+
+<h2 class="section-title">Previous sessions</h2>
+<div class="card">
+  <% if (sessions.length) { %>
+  <div class="sessions">
+    <% sessions.forEach(function (s) { %><a class="chip" href="/courses/<%= course.id %>/register?date=<%= s.date %>"<%- s.date === register.date ? ' aria-current="true"' : '' %>><%= s.date %><small><%= s.present %>P &middot; <%= s.late %>L &middot; <%= s.absent %>A</small></a><% }); %>
+  </div>
+  <% } else { %><div class="empty"><p>No attendance has been taken for this course yet.</p></div><% } %>
+</div>
+<%- include('../partials/foot') %>

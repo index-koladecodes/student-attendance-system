@@ -1,0 +1,23 @@
+<% const f = values || (student || {}); %>
+<%- include('../partials/head', { title: student ? 'Edit student' : 'Add student' }) %>
+<p class="crumb"><a href="/students">Students</a> / <%= student ? 'Edit ' + student.fullName : 'Add student' %></p>
+<div class="page-head"><h1><%= student ? 'Edit student' : 'Add student' %></h1></div>
+<div class="card card-pad narrow">
+  <% if (error) { %><p class="form-error" role="alert"><%= error %></p><% } %>
+  <form method="post" action="<%= student ? '/students/' + student.id + '/edit' : '/students' %>" novalidate>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <%- include('../partials/field', { name: 'matricNo', label: 'Matric number', value: f.matricNo, required: true, autofocus: true }) %>
+    <%- include('../partials/field', { name: 'fullName', label: 'Full name', value: f.fullName, required: true }) %>
+    <div class="grid-2">
+      <%- include('../partials/field', { name: 'department', label: 'Department', value: f.department }) %>
+      <%- include('../partials/field', { name: 'level', label: 'Level', value: f.level }) %>
+    </div>
+    <% if (student) { %>
+      <%- include('../partials/field', { name: 'accountEmail', label: 'Link to a student login', type: 'email', value: f.accountEmail, hint: 'Enter the email of an existing student account to connect it to this record.' }) %>
+    <% } %>
+    <div class="form-actions"><a class="btn" href="/students">Cancel</a>
+      <% if (student) { %><a class="btn btn-danger" href="/students/<%= student.id %>/delete">Delete</a><% } %>
+      <button class="btn btn-primary" type="submit"><%= student ? 'Save changes' : 'Add student' %></button></div>
+  </form>
+</div>
+<%- include('../partials/foot') %>

@@ -1,0 +1,21 @@
+<%- include('partials/head', { title: 'Sign in', bare: true }) %>
+<div class="auth">
+  <aside class="auth-aside">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">&#10003;</span>Attendance</div>
+    <h1>Every lecture, on the register.</h1>
+    <p>Mark attendance in seconds, correct it any time, and see exactly who is falling behind.</p>
+    <div class="legend" aria-hidden="true"><span>Present</span><span>Late</span><span>Absent</span></div>
+  </aside>
+  <div class="auth-main"><div class="auth-card card card-pad">
+    <div class="seg-tabs"><a href="/login" aria-current="page">Sign in</a><a href="/register">Student sign-up</a></div>
+    <%- include('partials/flash') %>
+    <% if (error) { %><p class="form-error" role="alert"><%= error %></p><% } %>
+    <form method="post" action="/login" novalidate>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <%- include('partials/field', { name: 'email', label: 'Email', type: 'email', value: values.email, required: true, autocomplete: 'username', autofocus: true }) %>
+      <%- include('partials/field', { name: 'password', label: 'Password', type: 'password', value: '', required: true, autocomplete: 'current-password' }) %>
+      <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+    </form>
+  </div></div>
+</div>
+<%- include('partials/foot') %>

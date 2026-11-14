@@ -1,0 +1,11 @@
+<%# One labelled form field. Params: name, label, type, value, required, hint, autocomplete, placeholder, maxlength %>
+<div class="field">
+  <label for="f-<%= name %>"><%= label %><% if (!locals.required) { %> <span class="muted">(optional)</span><% } %></label>
+  <input id="f-<%= name %>" name="<%= name %>" type="<%= locals.type || 'text' %>" value="<%= locals.value == null ? '' : value %>"
+    <% if (locals.required) { %>required<% } %>
+    <% if (locals.autocomplete) { %>autocomplete="<%= autocomplete %>"<% } else { %>autocomplete="off"<% } %>
+    <% if (locals.placeholder) { %>placeholder="<%= placeholder %>"<% } %>
+    <% if (locals.maxlength) { %>maxlength="<%= maxlength %>"<% } %>
+    <% if (locals.autofocus) { %>autofocus<% } %>>
+  <% if (locals.hint) { %><p class="hint"><%= hint %></p><% } %>
+</div>
