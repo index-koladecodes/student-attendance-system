@@ -5,7 +5,7 @@
     <div class="date-box">
       <a class="btn btn-small" href="/courses/<%= course.id %>/register?date=<%= prevDate %>" aria-label="Previous day (<%= prevDate %>)">&lsaquo;</a>
       <form class="date-form" method="get" action="/courses/<%= course.id %>/register">
-        <div class="field"><label for="reg-date">Date (DD-MM-YYYY)</label>
+        <div class="field"><label for="reg-date">Date</label>
           <input id="reg-date" name="date" type="text" inputmode="numeric" maxlength="10" value="<%= register.date %>" pattern="\d{2}-\d{2}-\d{4}" placeholder="DD-MM-YYYY" autocomplete="off"></div>
         <button class="btn btn-small" type="submit">Go</button>
       </form>
